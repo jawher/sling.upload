@@ -9,15 +9,17 @@ import (
 
 	"bytes"
 
+	"os"
+
 	"github.com/dghubble/sling"
 	"github.com/stretchr/testify/require"
 )
 
 func TestUpload(t *testing.T) {
 	b := New(
-		Param("param", "value"),
-		Reader("reader", "reader.txt", strings.NewReader("readervalue")),
 		File("file", "fixtures/file.txt"),
+		Reader("reader", "reader.txt", strings.NewReader("readervalue")),
+		Param("param", "value"),
 	)
 
 	require.Equal(t, "multipart/form-data; boundary=SlingFormBoundary0amF3aGVy", b.ContentType())
@@ -27,6 +29,8 @@ func TestUpload(t *testing.T) {
 
 	actualContent, err := ioutil.ReadAll(reader)
 	require.NoError(t, err)
+
+	ioutil.WriteFile("fixtures/actual.txt", actualContent, os.ModePerm)
 
 	expectedContent, err := ioutil.ReadFile("fixtures/expected.txt")
 	expectedContent = bytes.Replace(expectedContent, []byte("\n"), []byte("\r\n"), -1)
