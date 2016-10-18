@@ -1,0 +1,15 @@
+--SlingFormBoundary0amF3aGVy
+Content-Disposition: form-data; name="file"; filename="file.txt"
+Content-Type: application/octet-stream
+
+fileValue
+--SlingFormBoundary0amF3aGVy
+Content-Disposition: form-data; name="reader"; filename="reader.txt"
+Content-Type: application/octet-stream
+
+readervalue
+--SlingFormBoundary0amF3aGVy
+Content-Disposition: form-data; name="param"
+
+value
+--SlingFormBoundary0amF3aGVy--
