@@ -1,0 +1,14 @@
+--SlingFormBoundary0amF3aGVy
+Content-Disposition: form-data; name="file"; filename="file.txt"
+Content-Type: application/json
+
+fileValue
+--SlingFormBoundary0amF3aGVy
+Content-Disposition: form-data; name="reader"
+
+readervalue
+--SlingFormBoundary0amF3aGVy
+Content-Disposition: form-data; name="param"
+
+value
+--SlingFormBoundary0amF3aGVy--

@@ -1,0 +1,14 @@
+language: go
+go:
+- 1.6
+- 1.7
+
+sudo: false
+
+install:
+- go get github.com/gordonklaus/ineffassign
+- go get github.com/golang/lint/golint
+- go get -t ./...
+
+script:
+- scripts/checks.sh
