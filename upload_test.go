@@ -1,4 +1,4 @@
-package upload
+package upload_test
 
 import (
 	"testing"
@@ -12,14 +12,25 @@ import (
 	"os"
 
 	"github.com/dghubble/sling"
+	"github.com/jawher/sling.upload"
 	"github.com/stretchr/testify/require"
 )
 
 func TestUpload(t *testing.T) {
-	b := New(
-		File("file", "fixtures/file.txt"),
-		Reader("reader", "reader.txt", strings.NewReader("readervalue")),
-		Param("param", "value"),
+	b := upload.New(
+		upload.File("file", "fixtures/file.txt"),
+		upload.Reader("reader", "reader.txt", strings.NewReader("readervalue")),
+		upload.Param("param", "value"),
+	)
+
+	upload.New(
+		upload.Part("paramName", upload.Filev("fixtures/file.txt"), upload.PartConfig{
+			ContentType: "application/json",
+		}),
+		upload.File("paramName", upload.Reader(strings.NewReader("lol sdfasdf")), upload.PartConfig{
+			Filename:    "data.json",
+			ContentType: "application/json",
+		}),
 	)
 
 	require.Equal(t, "multipart/form-data; boundary=SlingFormBoundary0amF3aGVy", b.ContentType())
@@ -40,5 +51,5 @@ func TestUpload(t *testing.T) {
 }
 
 func TestCompatibleWithSling(t *testing.T) {
-	sling.New().BodyProvider(New())
+	sling.New().BodyProvider(upload.New())
 }

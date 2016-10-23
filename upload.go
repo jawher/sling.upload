@@ -8,6 +8,8 @@ import (
 	"os"
 	"path/filepath"
 
+	"net/textproto"
+
 	"github.com/dghubble/sling"
 )
 
@@ -15,7 +17,47 @@ var (
 	multipartFromBoundary = "SlingFormBoundary0amF3aGVy"
 )
 
-type Part func(w *multipart.Writer) error
+type Configurer func(*PartConfig)
+
+func Header(key, value string) Configurer {
+	return func(p *PartConfig) {
+		p.Headers.Add(key, value)
+	}
+}
+
+type PartConfig struct {
+	Name     string
+	Filename string
+	Content  ContentProvider
+	Headers  textproto.MIMEHeader
+}
+
+type PartHandler func(w *multipart.Writer) error
+
+func Part(name string, content ContentProvider, configurers ...Configurer) PartHandler {
+	pc := &PartConfig{
+		Name:     name,
+		Filename: "",
+		Content:  content,
+		Headers:  make(textproto.MIMEHeader),
+	}
+
+	for _, cfg := range configurers {
+		cfg(pc)
+	}
+
+}
+
+func defaultPartHandler(pc *PartConfig) PartHandler {
+	return func(w *multipart.Writer) error {
+		disposition := pc.Headers.Get("Content-Disposition")
+
+		if disposition == "" {
+
+		}
+		w.CreatePart()
+	}
+}
 
 // File creates a part from an existing file on disk. The name argument sets the part name, and path must point to an existing file on disk.
 func File(name string, path string) Part {
