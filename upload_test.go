@@ -59,6 +59,10 @@ func TestUpload(t *testing.T) {
 	expectedContent, err := ioutil.ReadFile("fixtures/expected.txt")
 	require.NoError(t, err)
 
+	if bytes.Contains(expectedContent, []byte("\r\n")) {
+		t.Fatal("fixtures/expected.txt should only use LF (and not CRLF)")
+	}
+
 	require.Equal(t, bytes.Replace(expectedContent, []byte("\n"), []byte("\r\n"), -1), actualContent)
 }
 
