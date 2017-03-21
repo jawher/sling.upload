@@ -11,6 +11,8 @@ import (
 
 	"flag"
 
+	"bytes"
+
 	"github.com/dghubble/sling"
 	upload "github.com/jawher/sling.upload"
 	"github.com/stretchr/testify/require"
@@ -57,7 +59,7 @@ func TestUpload(t *testing.T) {
 	expectedContent, err := ioutil.ReadFile("fixtures/expected.txt")
 	require.NoError(t, err)
 
-	require.Equal(t, expectedContent, actualContent)
+	require.Equal(t, bytes.Replace(expectedContent, []byte("\n"), []byte("\r\n"), -1), actualContent)
 }
 
 func TestCompatibleWithSling(t *testing.T) {
